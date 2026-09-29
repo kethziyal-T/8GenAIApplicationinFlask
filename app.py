@@ -5,12 +5,12 @@ from services.genai_service import get_response
 import markdown
 
 app = Flask(__name__)
-
+genai.configure(api_key=os.getenv("GENAI_API_KEY"))
 
 @app.route("/")
 def home():
     return render_template("index.html")
-genai.configure(api_key=os.getenv("GENAI_API_KEY"))
+
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -38,3 +38,5 @@ def chat():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
+app=app

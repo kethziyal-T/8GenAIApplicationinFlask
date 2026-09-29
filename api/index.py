@@ -1,4 +1,6 @@
+import sys
 import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, render_template, request
 import google.generativeai as genai
 from services.genai_service import get_response

@@ -1,44 +1,44 @@
-import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, render_template, request
 import google.generativeai as genai
-from services.genai_service import get_response
 import markdown
+from google.api_core.exceptions import GoogleAPIError
 
-app = Flask(__name__)
-genai.configure(api_key=os.getenv("GENAI_API_KEY"))
+# Tell Flask explicitly to look outside the api folder for templates
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+template_dir = os.path.join(root_dir, 'templates')
+
+app = Flask(__name__, template_folder=template_dir)
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+# Combined Gemini Service function directly inside this file
+def get_response(prompt):
+    fixed_prompt = f"Answer the following question in valid HTML only.\n\nQuestion:\n{prompt}"
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(fixed_prompt)
+        return response.text.strip()
+    except GoogleAPIError as e:
+        return f"<p>Error communicating with Gemini AI: {str(e)}</p>"
+    except Exception as e:
+        return f"<p>An unexpected error occurred: {str(e)}</p>"
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
-
 @app.route("/chat", methods=["POST"])
 def chat():
-
-    prompt = request.form["prompt"]
-
-    response = get_response(prompt)
-
-       # Convert Markdown to HTML
-    response_html = markdown.markdown(
-        response,
-        extensions=[
-            "fenced_code",
-            "tables"
-        ]
-    )
-
-
-    return render_template(
-        "result.html",
-        prompt=prompt,
-        response=response_html
-    )
-
+    user_message = request.form.get("message", "")
+    if not user_message:
+        return render_template("index.html", error="Message cannot be empty")
+    
+    raw_ai_response = get_response(user_message)
+    html_ai_response = markdown.markdown(raw_ai_response)
+    
+    return render_template("result.html", response=html_ai_response, user_message=user_message)
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
-app=app
+
+app = app

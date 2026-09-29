@@ -2,10 +2,7 @@ import time
 import google.generativeai as genai
 import os
 from google.api_core.exceptions import GoogleAPIError
-from google.genai.errors import ServerError
-from config import GENAI_API_KEY
-
-client = genai.Client(api_key=GENAI_API_KEY)
+genai.configure(api_key=os.getenv("GENAI_API_KEY"))
 
 def get_response(prompt):
 
@@ -28,13 +25,12 @@ Question:
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            response = client.models.generate_content(
-                model="gemini-3.5-flash-lite", 
-                contents=fixed_prompt
-            )
+            try:
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(fixed_prompt)
             return response.text.strip()
             
-        except ServerError as e:
+        except GoogleAPIError as e:
             # If it's a 503 error, wait a moment and try again
             if "503" in str(e) and attempt < max_retries - 1:
                 time.sleep(2)  # Wait 2 seconds before retrying

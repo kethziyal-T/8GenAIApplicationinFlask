@@ -1,5 +1,5 @@
 import time
-from google import genai
+import google.generativeai as genai
 from google.genai.errors import ServerError
 from config import GENAI_API_KEY
 

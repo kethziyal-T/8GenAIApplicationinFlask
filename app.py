@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from services.openai_service import get_response
+from services.genai_service import get_response
 import markdown
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ def chat():
     return render_template(
         "result.html",
         prompt=prompt,
-        response=response
+        response=response_html
     )
 
 

@@ -1,7 +1,7 @@
-from openai import OpenAI
-from config import OPENAI_API_KEY
+from genai import GenAI
+from config import GENAI_API_KEY
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = GenAI(api_key=GENAI_API_KEY)
 
 def get_response(prompt):
 
@@ -21,7 +21,7 @@ Question:
 """
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gemini-3.5-flash-lite",
         messages=[
             {"role": "user", "content": fixed_prompt}
         ]

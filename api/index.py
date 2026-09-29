@@ -4,13 +4,6 @@ import google.generativeai as genai
 import markdown
 from google.api_core.exceptions import GoogleAPIError
 
-# Force Flask to trace paths outside the isolated serverless function folder
-root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-template_dir = os.path.join(root_dir, 'templates')
-
-app = Flask(__name__, template_folder=template_dir)
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
 # Combined Gemini Service function directly inside this file
 def get_response(prompt):
     fixed_prompt = f"Answer the following question in valid HTML only.\n\nQuestion:\n{prompt}"

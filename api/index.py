@@ -4,7 +4,7 @@ import google.generativeai as genai
 import markdown
 from google.api_core.exceptions import GoogleAPIError
 
-# Tell Flask explicitly to look outside the api folder for templates
+# Force Flask to trace paths outside the isolated serverless function folder
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 template_dir = os.path.join(root_dir, 'templates')
 

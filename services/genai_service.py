@@ -1,5 +1,7 @@
 import time
 import google.generativeai as genai
+import os
+from google.api_core.exceptions import GoogleAPIError
 from google.genai.errors import ServerError
 from config import GENAI_API_KEY
 

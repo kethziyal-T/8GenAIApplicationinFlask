@@ -32,4 +32,4 @@ def chat():
         return render_template("index.html", error="Please enter a valid prompt.")
         
     response_html = get_response(prompt)
-    return render_template("index.html", response=response_html)
+    return render_template("result.html", response=response_html,prompt=prompt)

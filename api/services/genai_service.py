@@ -36,7 +36,7 @@ Question:
             
         except Exception as e:
             # If it's a server/rate limit error, wait a moment and try again
-            if ("503" in str(e) or "Server" in str(e)) and attempt < max_retries - 1:
+            if ("429" in str(e) or "Server" in str(e)) and attempt < max_retries - 1:
                 time.sleep(2)  # Wait 2 seconds before retrying
                 continue
             

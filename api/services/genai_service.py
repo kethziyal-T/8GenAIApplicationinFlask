@@ -2,7 +2,7 @@ import time
 from google import genai
 from google.genai import errors
 # This line must come BEFORE you use the variable below!
-from config import GENAI_API_KEY
+from api.config import GENAI_API_KEY
 
 # Initialize the modern SDK client using your imported key
 client = genai.Client(api_key=GENAI_API_KEY)

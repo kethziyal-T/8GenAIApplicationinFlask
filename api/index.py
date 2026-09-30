@@ -1,3 +1,4 @@
+from flask import Flask
 import os
 import sys
 
@@ -6,7 +7,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Now your existing imports will work correctly on Vercel
 import config
-from services.genai_service import ...
 from flask import Flask, render_template, request
 # Import your background service
 from services.genai_service import get_response
@@ -15,6 +15,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
+    import scipy
+    import numpy
     return render_template("index.html")
 
 

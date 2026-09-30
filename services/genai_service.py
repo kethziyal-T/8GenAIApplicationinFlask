@@ -1,12 +1,14 @@
 import time
-import google.generativeai as genai
-import os
-from google.api_core.exceptions import GoogleAPIError
-genai.configure(api_key=os.getenv("GENAI_API_KEY"))
+from google import genai
+from google.genai import errors
+# This line must come BEFORE you use the variable below!
+from config import GENAI_API_KEY
+
+# Initialize the modern SDK client using your imported key
+client = genai.Client(api_key=GENAI_API_KEY)
 
 def get_response(prompt):
-
-    fixed_prompt=f"""
+    fixed_prompt = f"""
 Answer the following question in valid HTML only.
 
 Requirements:
@@ -21,22 +23,23 @@ Question:
 {prompt}
 """
 
-    # Retry loop configuration (Tries up to 3 times before giving up)
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            try:
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            response = model.generate_content(fixed_prompt)
+            # Request content from the model
+            response = client.models.generate_content(
+                model="gemini-3.5-flash-lite", 
+                contents=fixed_prompt
+            )
             return response.text.strip()
             
-        except GoogleAPIError as e:
-            # If it's a 503 error, wait a moment and try again
-            if "503" in str(e) and attempt < max_retries - 1:
+        except errors.APIError as e:
+            # If it's a server/rate limit error, wait a moment and try again
+            if ("503" in str(e) or "Server" in str(e)) and attempt < max_retries - 1:
                 time.sleep(2)  # Wait 2 seconds before retrying
                 continue
             
-            # If all retries fail, return a polite fallback layout instead of crashing
+            # Fallback error layout if all retries fail
             return """
             <h2>Service Temporarily Busy</h2>
             <p>Our AI servers are experiencing exceptionally high traffic at the moment. 

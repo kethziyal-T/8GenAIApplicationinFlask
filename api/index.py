@@ -1,4 +1,12 @@
 import os
+import sys
+
+# Adds the parent directory (root folder) to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Now your existing imports will work correctly on Vercel
+import config
+from services.genai_service import ...
 from flask import Flask, render_template, request
 # Import your background service
 from services.genai_service import get_response

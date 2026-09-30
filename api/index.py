@@ -27,7 +27,7 @@ def chat():
     # Lazy load the heavy AI services inside the route to avoid timeouts
     from services.genai_service import get_response
 
-    prompt = request.form.get("prompt", "").strip()
+    prompt = request.form.get("message", "").strip()
     if not prompt:
         return render_template("index.html", error="Please enter a valid prompt.")
         

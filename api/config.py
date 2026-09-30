@@ -6,11 +6,5 @@ import os
 
 # 
 # 2. Safely read the loaded API key variable strings
-GENAI_API_KEY = os.getenv("GENAI_API_KEY")
+GENAI_API_KEY = os.getenv("GENAI_API_KEY","")
 
-# 3. Security Check: Raise a helpful message if the variable is missing
-if not GENAI_API_KEY:
-    raise ValueError(
-        "❌ Critical Configuration Error: 'GENAI_API_KEY' was not found. "
-        "Please check your environment configurations or your local 1.env file setup."
-    )

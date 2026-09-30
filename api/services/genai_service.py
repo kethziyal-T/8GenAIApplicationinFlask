@@ -1,4 +1,5 @@
 import time
+import os
 from google import genai
 from google.genai import errors
 # This line must come BEFORE you use the variable below!
@@ -9,7 +10,7 @@ client = genai.Client(api_key=GENAI_API_KEY)
 
 def get_response(prompt):
     fixed_prompt = f"""
-Answer the following question in valid HTML only.
+Answer the following question in valid HTML only.Do not include markdown, ```html blocks, <html>, <body>, or <head> tags. Use <h3> for headings, <p> for paragraphs, and <ul> with <li> for lists. Question: {prompt}"
 
 Requirements:
 - Use <h2>, <h3> headings.
@@ -33,7 +34,7 @@ Question:
             )
             return response.text.strip()
             
-        except errors.APIError as e:
+        except Exception as e:
             # If it's a server/rate limit error, wait a moment and try again
             if ("503" in str(e) or "Server" in str(e)) and attempt < max_retries - 1:
                 time.sleep(2)  # Wait 2 seconds before retrying

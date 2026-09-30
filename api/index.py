@@ -17,10 +17,12 @@ app = Flask(
 )
 
 @app.route("/")
+@app.route("/api/index")
 def home():
     return render_template("index.html")
 
 @app.route("/chat", methods=["POST"])
+@app.route("/api/index/chat", methods=["POST"])
 def chat():
     # Lazy load the heavy AI services inside the route to avoid timeouts
     from services.genai_service import get_response

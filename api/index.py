@@ -9,12 +9,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from flask import Flask, render_template, request
 # Import your background service
-from services.genai_service import get_response
+
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
+    
     import scipy
     import numpy
     return render_template("index.html")
@@ -22,6 +23,8 @@ def home():
 
 @app.route("/chat", methods=["POST"])
 def chat():
+    from services.genai_service import get_response
+    
     # Safeguard against empty or missing prompt submissions
     prompt = request.form.get("prompt", "").strip()
     if not prompt:

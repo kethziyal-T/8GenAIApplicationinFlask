@@ -10,7 +10,7 @@ from flask import Flask, render_template, request
 # 3. Local imports (now fully visible to Python)
 from api.config import GENAI_API_KEY
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 
 @app.route("/")
 def home():
